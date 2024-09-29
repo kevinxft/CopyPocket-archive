@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <div className="bg-red-500 p-10">tailwindcss test page</div>
+      <div className="text-5xl">Copy Saver</div>
     </>
   );
 }
