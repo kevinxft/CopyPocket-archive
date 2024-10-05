@@ -4,7 +4,7 @@ import { saveLink } from "@/utils";
 export default defineBackground(() => {
   chrome.contextMenus.create({
     id: MemuId,
-    title: "保存到CopySaver",
+    title: "保存到CopyPocker",
     contexts: ["link"],
   });
 

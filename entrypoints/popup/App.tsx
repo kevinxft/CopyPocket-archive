@@ -1,15 +1,22 @@
 import { UrlRecord } from "@/types";
 import { Actions } from "@/types/const";
 import { useState } from "react";
-import { getDomain, sendMessageToBackground } from "@/utils";
+import {
+  getDomain,
+  sendMessageToBackground,
+  copiedUrlToClipboard,
+} from "@/utils";
 
 // 发送消息到 background 脚本
 
 function App() {
   const [urls, setUrls] = useState<UrlRecord[]>([]);
+  const [domain, setDomain] = useState("");
 
   const onGetData = async () => {
+    console.warn("onGetData");
     const res = await sendMessageToBackground({ action: Actions.getData });
+    console.warn("res: ", res);
     if (res) {
       setUrls(res);
       return res;
@@ -19,22 +26,31 @@ function App() {
 
   useEffect(() => {
     onGetData();
+    getDomain().then((res) => {
+      setDomain(res);
+    });
   }, []);
 
   const onCopyAll = async () => {
     const res = await onGetData();
-    console.warn("allData: ", res);
-    copiedUrlToClipboard(res);
+    await copiedUrlToClipboard(res);
   };
 
   const onCopyCurrentTab = async () => {
-    const domain = await getDomain();
     const res = await sendMessageToBackground({
       action: Actions.getData,
       domain,
     });
-    console.log("currentData: ", res);
-    copiedUrlToClipboard(res);
+    await copiedUrlToClipboard(res);
+  };
+
+  const onCutCurrentTab = async () => {
+    await onCopyCurrentTab();
+    await sendMessageToBackground({
+      action: Actions.clearData,
+      domain,
+    });
+    await onGetData();
   };
 
   return (
@@ -42,6 +58,9 @@ function App() {
       <div className="text-sm">一共: {urls.length} 条数据</div>
       <button onClick={onCopyAll}>复制全部链接🔗</button>
       <button onClick={onCopyCurrentTab}>复制当前标签页复制的链接🔗</button>
+      <button onClick={onCutCurrentTab}>
+        剪切当前标签页复制的链接🔗(会清空数据)
+      </button>
     </div>
   );
 }

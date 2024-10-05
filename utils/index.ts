@@ -1,5 +1,5 @@
 import { Actions } from "@/types/const";
-import { getAllData, addData } from "./db";
+import { getAllData, addData, clearData } from "./db";
 import { UrlRecord } from "@/types";
 
 export const getDomain = async (): Promise<string> => {
@@ -40,6 +40,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse([]);
       });
     return true; // 保持消息通道开放以进行异步响应
+  } else if (message.action === Actions.clearData) {
+    clearData(message.domain)
+      .then(() => {
+        sendResponse();
+      })
+      .catch(() => {
+        sendResponse();
+      });
+    return true;
   }
 });
 
@@ -64,8 +73,10 @@ export function getCurrentTabId(): Promise<number> {
 
 export const copiedUrlToClipboard = async (urls: UrlRecord[]) => {
   const copiedUrls = urls.map((url) => url.copiedUrl);
-  const text = copiedUrls.join("\n");
-  await copyToClipboard(text);
+  const text = copiedUrls.join("\n").trim();
+  if (text) {
+    await copyToClipboard(text);
+  }
 };
 
 export async function copyToClipboard(text: string): Promise<void> {
