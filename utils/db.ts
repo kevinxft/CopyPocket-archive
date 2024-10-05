@@ -86,8 +86,53 @@ export function getAllData(domain?: string): Promise<UrlRecord[]> {
 
     request.onsuccess = (event: Event) => {
       const result = (event.target as IDBRequest<UrlRecord[]>).result;
-      console.warn("onsuccess: ", result, "");
       resolve(result);
     };
+  });
+}
+
+// 清除数据的函数
+export function clearData(domain?: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (!db) {
+      reject(new Error("数据库未连接"));
+      return;
+    }
+
+    const transaction = db.transaction(["urls"], "readwrite");
+    const objectStore = transaction.objectStore("urls");
+
+    if (domain) {
+      // 如果提供了 domain，则使用索引查找并删除匹配的数据
+      const index = objectStore.index("domain");
+      const request = index.openCursor(domain);
+
+      request.onsuccess = (event: Event) => {
+        const cursor = (event.target as IDBRequest<IDBCursorWithValue | null>)
+          .result;
+        if (cursor) {
+          cursor.delete(); // 删除当前记录
+          cursor.continue(); // 继续遍历游标
+        } else {
+          // 所有匹配的记录已删除
+          resolve();
+        }
+      };
+
+      request.onerror = () => {
+        reject(new Error("清除数据出错"));
+      };
+    } else {
+      // 如果没有提供 domain，则清除所有数据
+      const clearRequest = objectStore.clear();
+
+      clearRequest.onsuccess = () => {
+        resolve();
+      };
+
+      clearRequest.onerror = () => {
+        reject(new Error("清除所有数据出错"));
+      };
+    }
   });
 }
