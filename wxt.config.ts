@@ -9,6 +9,7 @@ export default defineConfig({
       "clipboardRead",
       "clipboardWrite",
       "activeTab",
+      "tabs",
       "contextMenus",
     ],
   },

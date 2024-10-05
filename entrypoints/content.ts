@@ -1,4 +1,4 @@
 export default defineContentScript({
-  matches: ["*://*.google.com/*"],
+  matches: ["*"],
   main() {},
 });
