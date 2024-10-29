@@ -30,7 +30,7 @@ export const saveLink = async (copiedUrl: string) => {
 };
 
 // 监听来自插件页面的消息
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
   if (message.action === Actions.getData) {
     getAllData(message.domain)
       .then((data) => {

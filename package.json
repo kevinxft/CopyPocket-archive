@@ -1,8 +1,8 @@
 {
-  "name": "CopyPocker",
-  "description": "manifest.json description",
+  "name": "copy-pocket",
+  "description": "可以将连接保存到copyPocker 中，然后在需要的时候直接合并复制到剪贴板中",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "wxt",
@@ -19,13 +19,18 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.13.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@wxt-dev/module-react": "^1.1.0",
     "autoprefixer": "^10.4.20",
+    "eslint": "^9.13.0",
+    "eslint-plugin-react": "^7.37.2",
+    "globals": "^15.11.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13",
     "typescript": "^5.5.4",
+    "typescript-eslint": "^8.11.0",
     "wxt": "^0.19.1"
   }
 }

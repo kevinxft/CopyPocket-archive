@@ -1,4 +1,4 @@
-export const MemuId = "SaveToCopySaver";
+export const MemuId = "save_to_pocker";
 
 export enum Actions {
   getData = "getData",

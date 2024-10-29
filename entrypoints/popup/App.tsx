@@ -6,7 +6,6 @@ import {
   sendMessageToBackground,
   copiedUrlToClipboard,
 } from "@/utils";
-
 // 发送消息到 background 脚本
 
 function App() {
@@ -14,9 +13,7 @@ function App() {
   const [domain, setDomain] = useState("");
 
   const onGetData = async () => {
-    console.warn("onGetData");
     const res = await sendMessageToBackground({ action: Actions.getData });
-    console.warn("res: ", res);
     if (res) {
       setUrls(res);
       return res;
@@ -54,13 +51,22 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-3 p-4">
+    <div className="flex flex-col items-center gap-3 p-4 w-[200px] rounded-lg">
       <div className="text-sm">一共: {urls.length} 条数据</div>
-      <button onClick={onCopyAll}>复制全部链接🔗</button>
-      <button onClick={onCopyCurrentTab}>复制当前标签页复制的链接🔗</button>
-      <button onClick={onCutCurrentTab}>
-        剪切当前标签页复制的链接🔗(会清空数据)
-      </button>
+      <div className="flex gap-3">
+        <button
+          className="bg-sky-500 text-white rounded-md py-2 px-4 hover:bg-sky-500/80 active:bg-sky-600"
+          onClick={onCopyAll}
+        >
+          复制
+        </button>
+        <button
+          className="bg-sky-500 text-white py-2 px-4 rounded-md hover:bg-sky-500/80 active:bg-sky-600"
+          onClick={onCutCurrentTab}
+        >
+          剪切
+        </button>
+      </div>
     </div>
   );
 }
